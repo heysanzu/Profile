@@ -3,7 +3,13 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+@font-face {
+    font-family: 'SanzuFont'; 
+    src: url('./fonts/comic_sans_regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Helps the text show up faster */
+}
 body {
     font-family: 'Comic Sans MS', 'Shantell Sans', cursive;
     background: #000;
