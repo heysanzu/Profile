@@ -1,56 +1,56 @@
-// Existing + new
-function toggleMenu() {
-    document.querySelector('nav ul').classList.toggle('active');
+// Smooth scroll
+function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
 }
 
-// Liquid particles (flow like fluid)
+// Intersection Observer for animations
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.animationPlayState = 'running';
+        }
+    });
+});
+
+document.querySelectorAll('.animate-fade, .animate-slide').forEach(el => {
+    el.style.animationPlayState = 'paused';
+    observer.observe(el);
+});
+
+// Particle animation (white dots floating)
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 const particles = [];
-for (let i = 0; i < 150; i++) {
+for (let i = 0; i < 100; i++) {
     particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 1,
-        vy: (Math.random() - 0.5) * 1,
-        radius: Math.random() * 3 + 1,
-        opacity: Math.random() * 0.5 + 0.2
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        radius: Math.random() * 2 + 1
     });
 }
 
-function animateParticles() {
+function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => {
-        p.x += p.vx + Math.sin(Date.now() * 0.001 + p.x) * 0.5;  // Liquid wave
-        p.y += p.vy + Math.cos(Date.now() * 0.001 + p.y) * 0.5;
+        p.x += p.vx;
+        p.y += p.vy;
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
-        ctx.save();
-        ctx.globalAlpha = p.opacity;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = '#fff';
         ctx.fill();
-        ctx.restore();
     });
-    requestAnimationFrame(animateParticles);
+    requestAnimationFrame(animate);
 }
-animateParticles();
-
-// 3D Tilt (VanillaTilt CDN loaded)
-VanillaTilt.init(document.querySelectorAll('[data-tilt]'), {
-    max: 25,
-    speed: 400,
-    glare: true,
-    "max-glare": 0.5
-});
+animate();
 
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
-    canvas.height = innerHeight;
+    canvas.height = window.innerHeight;
 });
